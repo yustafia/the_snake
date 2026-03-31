@@ -70,6 +70,10 @@ class Snake(GameObject):
         )
         self.reset()
 
+    def get_head_position(self):
+        """Возвращает позицию головы змейки."""
+        return self.positions[0]
+
     def update_direction(self):
         """Обновляет текущее направление движения змейки."""
         if self.next_direction:
@@ -81,7 +85,7 @@ class Snake(GameObject):
         if self.direction is None:
             return
 
-        head_x, head_y = self.positions[0]
+        head_x, head_y = self.get_head_position()
         dx, dy = self.direction
         new_head = (
             (head_x + dx * GRID_SIZE) % SCREEN_WIDTH,
@@ -113,7 +117,7 @@ class Snake(GameObject):
             pygame.draw.rect(screen, self.body_color, rect)
             pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
 
-        head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
+        head_rect = pygame.Rect(self.get_head_position(), (GRID_SIZE, GRID_SIZE))
         pygame.draw.rect(screen, self.body_color, head_rect)
         pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
 
@@ -151,7 +155,7 @@ def main():
         snake.update_direction()
         snake.move()
 
-        if snake.positions[0] == apple.position:
+        if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.randomize_position()
 
