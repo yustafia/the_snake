@@ -1,7 +1,8 @@
-from random import choice, randint
+from random import randint
+
 import pygame
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
+SCREEN_WIDTH, SCREEN_HEIGHT = 840, 680
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
@@ -16,7 +17,8 @@ BORDER_COLOR = (93, 216, 228)
 APPLE_COLOR = (255, 0, 0)
 SNAKE_COLOR = (0, 255, 0)
 
-SPEED = 20
+SPEED = 15
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 pygame.display.set_caption('Змейка')
 clock = pygame.time.Clock()
@@ -50,18 +52,21 @@ class Apple(GameObject):
 
 class Snake(GameObject):
     def __init__(self, body_color=SNAKE_COLOR):
-        super().__init__((SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), body_color=body_color)
+        super().__init__(
+            (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+            body_color=body_color
+        )
         self.reset()
 
     def update_direction(self):
         if self.next_direction:
             self.direction = self.next_direction
             self.next_direction = None
-    
+
     def move(self):
         if self.direction is None:
             return
-            
+
         head_x, head_y = self.positions[0]
         dx, dy = self.direction
         new_head = (
@@ -88,7 +93,7 @@ class Snake(GameObject):
 
     def draw(self):
         for position in self.positions[:-1]:
-            rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
+            rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, self.body_color, rect)
             pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
 
@@ -99,7 +104,6 @@ class Snake(GameObject):
         if self.last:
             last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
-
 
 
 def handle_keys(game_object):
@@ -122,6 +126,7 @@ def main():
     pygame.init()
     snake = Snake()
     apple = Apple()
+
     while True:
         clock.tick(SPEED)
         handle_keys(snake)
